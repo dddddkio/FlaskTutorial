@@ -21,7 +21,7 @@
       </header>
       <p class="body">{{ post['body'] }}</p>
     </article>
-    {% if not loop.last %}
+    {% if not loop.last %}  # 用于在每个 博客帖子后面显示一条线来分隔帖子，最后一个帖子除外
       <hr>
     {% endif %}
   {% endfor %}

@@ -6,7 +6,7 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('blog', __name__)    # 没有url_prefix 所以在根目录
 
 
 @bp.route('/')
@@ -15,7 +15,7 @@ def index():
     posts = db.execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        ' ORDER BY created DESC'    # 为了在结果中包含 user 表中的 作者信息，使用了一个 JOIN
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
 
@@ -46,7 +46,8 @@ def create():
     return render_template('blog/create.html')
 
 
-def get_post(id, check_author=True):
+def get_post(id, check_author=True):    # update 和 delete 视图都需要通过 id 来获取一个 post ，并且 检查作者与登录用户是否一致。
+                                        # 为避免重复代码，可以写一个函数来获取 post ， 并在每个视图中调用它。
     post = get_db().execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
@@ -55,10 +56,16 @@ def get_post(id, check_author=True):
     ).fetchone()
 
     if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
+        abort(404, f"Post id {id} doesn't exist.")  # 直接get输入 如果没有这条post返回一个信息
 
-    if check_author and post['author_id'] != g.user['id']:
-        abort(403)
+    if check_author and post['author_id'] != g.user['id']:  # check_author 参数的作用是函数可以用于在不检查作者的情况下获取一个 post 。
+                                                            # 这主要用于显示一个独立的帖子页面的情况，因为这时用户是谁没有关系，
+                                                            # 用户不会修改帖子。
+                                                            # 如果不是你的创建的帖子 你get进入修改 就报一个403
+
+        abort(403)  # abort() 会引发一个特殊的异常，返回一个 HTTP 状态码。它有一个可选参数， 用于显示出错信息，
+                    # 若不使用该参数则返回缺省出错信息。 404 表示“未找到”， 403 代表“禁止访问”。
+                    # （ 401 表示“未授权”，但是我们重定向到登录 页面来代替返回这个状态码） （相当于自定义错误信息）
 
     return post
 

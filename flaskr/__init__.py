@@ -1,12 +1,12 @@
-""" win
-    set FLASK_APP = flaskr
-    set FLASK_ENV = development
+""" win 不加空格
+    set FLASK_APP=flaskr
+    set FLASK_ENV=development
     flask run
 """
 
-""" linux
-    export FLASK_APP = flaskr
-    export FLASK_ENV = development
+""" linux 
+    export FLASK_APP=flaskr
+    export FLASK_ENV=development
     flask run
 """
 
@@ -33,11 +33,12 @@ def create_app(test_config=None):
 
     # ensure the instance folder exists
     try:
-        os.makedirs(app.instance_path)  # 确保app.instance_path存在。Flask不会自动创建实例文件夹，但是必须确保创建这个文件夹，因为SQLite数据库文件会被保存在里面。
+        os.makedirs(app.instance_path)  # 确保app.instance_path存在。Flask不会自动创建实例文件夹，但是必须确保创建这个文件夹，
+                                        # 因为SQLite数据库文件会被保存在里面。
     except OSError:
         pass
 
-    from . import db    # 注册 db 文件
+    from . import db  # 注册 db 文件
     db.init_app(app)
 
     from . import auth

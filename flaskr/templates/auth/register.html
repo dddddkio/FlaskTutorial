@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}   <!-- 告诉 Jinja 这个模板基于基础模板，并且需要替换 相应的块。
+                                 所有替换的内容必须位于 { %block %} 标签之内。 -->
 
 {% block header %}
   <h1>{% block title %}Register{% endblock %}</h1>
 {% endblock %}
 
-{% block content %}
+{% block content %}     <!-- 父模板中分别有header和content 本页面进行替换 -->
   <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
+    <label for="username">Username</label>  <!-- for 属性规定 label 与哪个表单元素绑定。 -->
+    <input name="username" id="username" required>  <!-- 必填 -->
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
     <input type="submit" value="Register">

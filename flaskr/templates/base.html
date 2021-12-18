@@ -1,10 +1,10 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>{% block title %}{% endblock %} - Flaskr</title>     <!-- 定义过的块会被其他模板重载 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
   <h1>Flaskr</h1>
   <ul>
-    {% if g.user %}
+    {% if g.user %}     <!-- 判断是否存在user连接 -->
       <li><span>{{ g.user['username'] }}</span>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
     {% else %}
@@ -17,7 +17,7 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
+  {% for message in get_flashed_messages() %}   <!-- 消息闪现 -->
     <div class="flash">{{ message }}</div>
   {% endfor %}
   {% block content %}{% endblock %}
